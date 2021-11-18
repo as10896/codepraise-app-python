@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  <form role="form" action="/repo/" method="post" id="add-repo-form">
+    <div class="row vertical-align query-bar">
+      <div class="col-2">
+        <div class="text-right">Github URL:</div>
+      </div>
+      <div class="col-8">
+        <input
+          type="text"
+          name="github_url"
+          id="github_url_input"
+          class="form-control"
+          placeholder="e.g.: https://www.github.com/soumyaray/YPBT-app"
+        >
+      </div>
+      <div class="col-2">
+        <button
+          type="submit"
+          id="repo-form-submit" 
+          class="submit"
+          value="submit"
+          class="btn btn-success"
+        >+ Add Repo</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 blank-row"></div>
+    </div>
+  </form>
+  <table class="table" id="repos_table">
+    <thead>
+      <tr>
+        <th>Repo Name</th>
+        <th>Github URL</th>
+        <th>Contributors</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for repo in repos %}
+      <tr class="repo_row" id="repo[{{ loop.index0 }}].row">
+        <td>
+          <span class="repo_name" id="repo[{{ loop.index0 }}].name">
+            <a 
+              href="/repo/{{ repo.owner.username }}/{{ repo.name }}"
+              id="repo[{{ loop.index0 }}].link"
+            >
+              {{ repo.name }}
+            </a>
+          </span>
+        </td>
+        <td>
+          <span class="repo_gh_url" id="repo[{{ loop.index0 }}].gh_url">
+            {{ repo.git_url }}
+          </span>
+        </td>
+        <td>
+          <table id="repo[{{ loop.index0 }}].contributors_table">
+            <tr>
+              <td>
+                <span class="repo_table_owner" id="repo[{{ loop.index0 }}].owner">
+                  {{ repo.owner.username }} ({{ repo.owner.email }})
+                </span>
+              </td>
+            </tr>
+            {% set outer_loop = loop %}
+            {% for contrib in repo.contributors %}
+            <tr>
+              <td>
+                <span class="repo_table_contributor" id="repo[{{ outer_loop.index0 }}].contributor">
+                  {{ contrib.username }} ({{ contrib.email }})
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
