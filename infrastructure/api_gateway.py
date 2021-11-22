@@ -16,6 +16,9 @@ class ApiGateway:
     def create_repo(self, username: str, reponame: str) -> str:
         return self.call_api("post", "repo", username, reponame)
 
+    def delete_all_repos(self) -> str:
+        return self.call_api("delete", "repo")
+
     def call_api(self, method: str, *resources: str) -> str:
         url_route = "/".join([self._config.API_URL, *resources])
         result: requests.models.Response = getattr(requests, method)(url_route)

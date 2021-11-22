@@ -1,0 +1,7 @@
+{% for category, message in get_flashed_messages(request) %}
+  {% if category == "error" %}
+    <div class="alert alert-danger" id="flash_bar_danger">{{ message }}</div>
+  {% elif category == "notice" %}
+    <div class="alert alert-success" id="flash_bar_success">{{ message }}</div>
+  {% endif %}
+{% endfor %}

@@ -14,11 +14,13 @@ gunicorn = "*"
 invoke = "*"  # to run console in production
 ipython = "*"  # to run console in production
 jinja2 = "*"
+itsdangerous = "*"  # to use SessionMiddleware from Starlette
+returns = "*"
 
 [dev-packages]
 pytest = "*"
-vcrpy = "*"
-pytest-cov = "*"
+selenium = "*"
+webdriver-manager = "*"  # to automatically install webdriver for Selenium
 flake8 = "*"
 radon = "*"
 black = "*"

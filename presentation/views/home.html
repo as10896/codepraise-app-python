@@ -9,8 +9,8 @@
       <div class="col-8">
         <input
           type="text"
-          name="github_url"
-          id="github_url_input"
+          name="url"
+          id="url_input"
           class="form-control"
           placeholder="e.g.: https://www.github.com/soumyaray/YPBT-app"
         >
@@ -18,67 +18,63 @@
       <div class="col-2">
         <button
           type="submit"
-          id="repo-form-submit" 
-          class="submit"
+          id="repo_form_submit" 
+          name="repo_form_submit"
           value="submit"
-          class="btn btn-success"
+          class="btn btn-success submit"
         >+ Add Repo</button>
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 blank-row"></div>
+      <div class="col-12 blank-row"></div>
     </div>
   </form>
+  {% if projects.any %}
   <table class="table" id="repos_table">
     <thead>
       <tr>
-        <th>Repo Name</th>
+        <th>Owner</th>
         <th>Github URL</th>
+        <th>Git Repo</th>
         <th>Contributors</th>
       </tr>
     </thead>
     <tbody>
-      {% for repo in repos %}
+      {% for project in projects.collection %}
       <tr class="repo_row" id="repo[{{ loop.index0 }}].row">
-        <td>
+        <td id="td_owner">
+          <span class="repo_table_owner" id="repo[{{ loop.index0 }}].owner">
+            {{ project.owner }}
+          </span>
+        </td>
+        <td id="td_repo_name">
           <span class="repo_name" id="repo[{{ loop.index0 }}].name">
             <a 
-              href="/repo/{{ repo.owner.username }}/{{ repo.name }}"
+              href="{{ project.link_to_repo }}"
               id="repo[{{ loop.index0 }}].link"
             >
-              {{ repo.name }}
+              {{ project.name }}
             </a>
           </span>
         </td>
-        <td>
+        <td id="td_link">
           <span class="repo_gh_url" id="repo[{{ loop.index0 }}].gh_url">
-            {{ repo.git_url }}
+            <a
+              href="{{ project.github_href }}"
+              target="_blank"
+            >{{ project.github_href }}</a>
           </span>
         </td>
-        <td>
-          <table id="repo[{{ loop.index0 }}].contributors_table">
-            <tr>
-              <td>
-                <span class="repo_table_owner" id="repo[{{ loop.index0 }}].owner">
-                  {{ repo.owner.username }} ({{ repo.owner.email }})
-                </span>
-              </td>
-            </tr>
-            {% set outer_loop = loop %}
-            {% for contrib in repo.contributors %}
-            <tr>
-              <td>
-                <span class="repo_table_contributor" id="repo[{{ outer_loop.index0 }}].contributor">
-                  {{ contrib.username }} ({{ contrib.email }})
-                </span>
-              </td>
-            </tr>
-            {% endfor %}
-          </table>
+        <td id="td_contributors">
+          <span
+            class="repo_table_contributor"
+            id="repo[{{ loop.index0 }}].contributors"
+          >{{ project.contributors }}</span>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
 </div>
 {% endblock %}

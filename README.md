@@ -13,6 +13,14 @@ pipenv --python 3.9  # create Python 3.9 virtualenv under current directory
 pipenv shell  # activate the virtualenv of the current directory
 pipenv install --dev  # install required dependencies with Pipfile
 ```
+### Set up session secret for cookie-based session management
+Put your session secret key under `config/secrets/<env>/SESSION_SECRET`
+
+One way to generate a key is to use `secrets.token_hex()`
+```bash
+python -c "import secrets; print(secrets.token_hex(16))"
+```
+
 
 ## Usage
 Here we use [invoke](https://docs.pyinvoke.org/) as our task management tool.
@@ -31,5 +39,4 @@ inv quality.all  # run all quality tasks (style + metric)
 inv quality.reformat  # reformat your code using the black code style
 inv quality.typecheck  # check type with mypy
 inv quality  # same as `inv quality.all`
-inv rmvcr  # delete cassette fixtures (test stubs generated with vcrpy)
 ```

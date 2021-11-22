@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     API_URL: str
+    SESSION_SECRET: str
 
 
 class Test(Settings):
@@ -13,6 +14,7 @@ class Test(Settings):
     class Config:
         env_file = "config/env/.env"
         env_file_encoding = "utf-8"
+        secrets_dir = "config/secrets/test"
 
 
 class Development(Settings):
@@ -21,6 +23,7 @@ class Development(Settings):
     class Config:
         env_file = "config/env/.env.dev"
         env_file_encoding = "utf-8"
+        secrets_dir = "config/secrets/dev"
 
 
 class Production(Settings):
@@ -29,6 +32,7 @@ class Production(Settings):
     class Config:
         env_file = "config/env/.env.prod"
         env_file_encoding = "utf-8"
+        secrets_dir = "config/secrets/prod"
 
 
 @lru_cache()
