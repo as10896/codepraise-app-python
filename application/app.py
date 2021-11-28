@@ -7,9 +7,9 @@ from returns.result import Result
 from returns.pipeline import is_successful
 
 from .helpers import flash, get_flashed_messages
-from .views import AllProjects
+from .views import AllProjects, FolderSummaryView
 from .forms import URLRequest
-from .representers import ReposRepresenter
+from .representers import ReposRepresenter, FolderSummaryRepresenter
 from .services import AddProject
 from config import get_settings
 from infrastructure import ApiGateway
@@ -51,3 +51,27 @@ def create_repo(request: Request, create_request: URLRequest = Depends()):
         flash(request, result.failure(), "error")
 
     return RedirectResponse("/", status_code=303)
+
+
+@app.get("/repo/{ownername}/{reponame}")
+def summary_for_entire_repo(ownername: str, reponame: str, request: Request):
+    summary_json: str = ApiGateway().folder_summary(ownername, reponame, "")
+    summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(summary_json)
+    folder_summary = FolderSummaryView(summary, request.url.path)
+
+    return templates.TemplateResponse(
+        "folder_summary.html", {"request": request, "folder": folder_summary}
+    )
+
+
+@app.get("/repo/{ownername}/{reponame}/{folder:path}")
+def summary_for_specific_folder(
+    ownername: str, reponame: str, folder: str, request: Request
+):
+    summary_json: str = ApiGateway().folder_summary(ownername, reponame, folder)
+    summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(summary_json)
+    folder_summary = FolderSummaryView(summary, request.url.path)
+
+    return templates.TemplateResponse(
+        "folder_summary.html", {"request": request, "folder": folder_summary}
+    )

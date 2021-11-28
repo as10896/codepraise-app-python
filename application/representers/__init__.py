@@ -1,2 +1,3 @@
 from .repo_representer import RepoRepresenter
 from .repos_representer import ReposRepresenter
+from .folder_summary_representer import FolderSummaryRepresenter

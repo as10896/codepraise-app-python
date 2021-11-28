@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  <h2>Folder: /{{ folder.name }}</h2>
+  <table class="table" id="repos_table">
+    <thead>
+      <tr>
+        <th>
+          {% for contributor in folder.contributors %}
+          <th>
+            {{ contributor.name }}
+          </th>
+          {% endfor %}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for sub in folder.subfolders %}
+      <tr>
+        <td>
+          <a href="{{ sub.link }}">
+            <span>{{ sub.name }}/</span>
+          </a>
+        </td>
+        {% for contributor in folder.contributors %}
+        <td>
+          <span>{{ sub.contributions[contributor] }}</span>
+        </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for _ in range(folder.contributors | length + 1) %}
+        <td></td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+
+      <tr>
+        <td>
+          <span>
+            files
+          </span>
+        </td>
+        {% for contributor in folder.contributors %}
+        <td>
+          <span>
+            {{ folder.base_folder.contributions[contributor] }}
+          </span>
+        </td>
+        {% endfor %}
+      </tr>
+
+      {% for sub in folder.base_files %}
+      <tr>
+        <td>
+          <span>
+            {{ sub.name }}
+          </span>
+        </td>
+        {% for contributor in folder.contributors %}
+        <td>
+          <span>
+            {{ sub.contributions[contributor] }}
+          </span>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+{% endblock %}
