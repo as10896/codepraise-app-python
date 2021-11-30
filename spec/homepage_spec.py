@@ -5,7 +5,9 @@ from .spec_helper import *
 def driver():
     options = webdriver.ChromeOptions()
     options.headless = True  # Operating in headless mode
-    service = Service(ChromeDriverManager().install())
+    driver_manager = ChromeDriverManager()
+    driver_path: str = driver_manager.install()
+    service = Service(driver_path)
     _driver = webdriver.Chrome(service=service, options=options)
     yield _driver
     # to prevent invisible headless browser instances from piling up on your machine
@@ -13,7 +15,7 @@ def driver():
     _driver.quit()
 
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(autouse=True)
 def delete_all_repos():
     ApiGateway().delete_all_repos()
 
@@ -21,48 +23,86 @@ def delete_all_repos():
 # HAPPY: should see no content
 def test_empty_homepage(driver):
     # GIVEN: user is on the home page without any projects
-    driver.get(HOMEPAGE)
+    page = HomePage(driver)
 
     # THEN: user should see basic headers, no projects and a welcome message
-    assert driver.find_element(By.CSS_SELECTOR, "h1#main_header").text == "CodePraise"
-    assert driver.find_element(By.CSS_SELECTOR, "input[name='url']").is_displayed()
-    assert driver.find_element(By.CSS_SELECTOR, "input#url_input").is_displayed()
-    assert driver.find_element(
-        By.CSS_SELECTOR, "button#repo_form_submit"
-    ).is_displayed()
-    with pytest.raises(NoSuchElementException):
-        driver.find_element(By.CSS_SELECTOR, "table#repos_table")
-
-    assert driver.find_element(By.CSS_SELECTOR, "div#flash_bar_success").is_displayed()
-    assert "Add" in driver.find_element(By.CSS_SELECTOR, "div#flash_bar_success").text
+    assert page.get_element_text(page.title_heading) == "CodePraise"
+    assert page.is_visible(page.url_input)
+    assert page.is_visible(page.add_button)
+    assert page.not_exists(page.repos_table)
+    assert "Add" in page.get_element_text(page.success_message)
+    assert page.not_exists(page.warning_message)
 
 
-# HAPPY: should add valid URL
-def test_add_new_project(driver):
+# HAPPY: should add project with valid URL
+def test_adding_new_projects(driver):
     # GIVEN: user is on the home page
-    driver.get(HOMEPAGE)
+    page = HomePage(driver)
 
     # WHEN: user enters a valid URL for a new repo
-    driver.find_element(By.CSS_SELECTOR, "input#url_input").send_keys(
-        "https://github.com/soumyaray/YPBT-app"
-    )
-    driver.find_element(By.CSS_SELECTOR, "button#repo_form_submit").click()
-    assert "added" in driver.find_element(By.CSS_SELECTOR, "div#flash_bar_success").text
-    with pytest.raises(NoSuchElementException):
-        driver.find_element(By.CSS_SELECTOR, "div#flash_bar_danger")
+    page.add_new_repo("https://github.com/soumyaray/YPBT-app")
 
     # THEN: user should see their new repo listed in a table
-    assert driver.find_element(By.CSS_SELECTOR, "table#repos_table")
-    table = driver.find_element(By.CSS_SELECTOR, "table#repos_table")
+    assert "added" in page.get_element_text(page.success_message)
+    assert page.is_visible(page.repos_table)
+    assert page.listed_repo(page.first_repo) == {
+        "owner": "soumyaray",
+        "name": "YPBT-app",
+        "gh_url": "https://github.com/soumyaray/YPBT-app",
+        "num_contributors": 3,
+    }
 
-    rows = table.find_elements(By.TAG_NAME, "tr")
-    assert len(rows) == 2
 
-    row = rows[1]
-    assert row.find_element(By.CSS_SELECTOR, "td#td_owner").text == "soumyaray"
-    assert row.find_element(By.CSS_SELECTOR, "td#td_repo_name").text == "YPBT-app"
-    assert "https" in row.find_element(By.CSS_SELECTOR, "td#td_link").text
-    assert (
-        len(row.find_element(By.CSS_SELECTOR, "td#td_contributors").text.split(", "))
-        == 3
-    )
+# HAPPY: should be add multiple projects
+def test_adding_multiple_projects(driver):
+    # GIVEN: on the homepage
+    page = HomePage(driver)
+
+    # WHEN: user enters a valid URL for two new repos
+    page.add_new_repo("https://github.com/soumyaray/YPBT-app")
+    page.add_new_repo("https://github.com/ThxSeafood/thxseafood-app")
+
+    # THEN: user should see both new repos listed in a table
+    assert page.exists(page.repos_table)
+    assert page.repos_listed_count == 2
+
+    assert page.listed_repo(page.first_repo) == {
+        "owner": "soumyaray",
+        "name": "YPBT-app",
+        "gh_url": "https://github.com/soumyaray/YPBT-app",
+        "num_contributors": 3,
+    }
+
+    assert page.listed_repo(page.second_repo) == {
+        "owner": "ThxSeafood",
+        "name": "thxseafood-app",
+        "gh_url": "https://github.com/ThxSeafood/thxseafood-app",
+        "num_contributors": 2,
+    }
+
+
+# BAD: should not accept incorrect URL
+def test_incorrect_github_url(driver):
+    # GIVEN: user is on the home page
+    page = HomePage(driver)
+
+    # WHEN: user enters an invalid URL
+    page.add_new_repo("http://bad_url")
+
+    # THEN: user should see an error alert and no table of repos
+    assert "Invalid" in page.get_element_text(page.warning_message)
+    assert page.not_exists(page.repos_table)
+
+
+# SAD: should not accept duplicate repo
+def test_duplicate_repo(driver):
+    # GIVEN: user is on the home page
+    page = HomePage(driver)
+
+    # WHEN: user enters a URL that was previously loaded
+    page.add_new_repo("https://github.com/soumyaray/YPBT-app")
+    page.add_new_repo("https://github.com/soumyaray/YPBT-app")
+
+    # THEN: user should should see an error message and the existing repo
+    assert "already" in page.get_element_text(page.warning_message)
+    assert page.repos_listed_count == 1

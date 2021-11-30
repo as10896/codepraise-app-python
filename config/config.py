@@ -10,6 +10,7 @@ class Settings(BaseSettings):
 
 class Test(Settings):
     environment = "test"
+    APP_URL: str
 
     class Config:
         env_file = "config/env/.env"

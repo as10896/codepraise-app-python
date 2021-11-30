@@ -58,8 +58,9 @@
           </span>
         </td>
         <td id="td_link">
-          <span class="repo_gh_url" id="repo[{{ loop.index0 }}].gh_url">
+          <span class="repo_gh_url" id="repo[{{ loop.index0 }}].gh_url_span">
             <a
+              id="repo[{{ loop.index0 }}].gh_url"
               href="{{ project.github_href }}"
               target="_blank"
             >{{ project.github_href }}</a>

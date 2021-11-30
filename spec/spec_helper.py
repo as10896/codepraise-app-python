@@ -12,4 +12,4 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
-HOMEPAGE = "http://localhost:3030"
+from .pages import HomePage
