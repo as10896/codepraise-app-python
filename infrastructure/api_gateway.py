@@ -1,31 +1,68 @@
 import requests
-from application.views import folder_summary
 
 from config import Settings, get_settings
+
+
+class ApiResponse:
+    HTTP_STATUS = {
+        200: "ok",
+        201: "created",
+        202: "processing",
+        204: "no_content",
+        403: "forbidden",
+        404: "not_found",
+        400: "bad_request",
+        409: "conflict",
+        422: "cannot_process",
+        500: "internal_error",
+    }
+
+    def __init__(self, code: int, message: str):
+        self._code = code
+        self._message = message
+        self._status = self.HTTP_STATUS[code]
+
+    @property
+    def code(self) -> int:
+        return self._code
+
+    @property
+    def message(self) -> str:
+        return self._message
+
+    @property
+    def ok(self) -> bool:
+        return self._status == "ok"
+
+    @property
+    def processing(self) -> bool:
+        return self._status == "processing"
 
 
 class ApiGateway:
     def __init__(self, config: Settings = get_settings()):
         self._config = config
 
-    def all_repos(self) -> str:
+    def all_repos(self) -> ApiResponse:
         return self.call_api("get", "repo")
 
-    def repo(self, username: str, reponame: str) -> str:
+    def repo(self, username: str, reponame: str) -> ApiResponse:
         return self.call_api("get", "repo", username, reponame)
 
-    def create_repo(self, username: str, reponame: str) -> str:
+    def create_repo(self, username: str, reponame: str) -> ApiResponse:
         return self.call_api("post", "repo", username, reponame)
 
-    def delete_all_repos(self) -> str:
+    def delete_all_repos(self) -> ApiResponse:
         return self.call_api("delete", "repo")
 
-    def folder_summary(self, username: str, reponame: str, foldername: str) -> str:
+    def folder_summary(
+        self, username: str, reponame: str, foldername: str
+    ) -> ApiResponse:
         return self.call_api("get", "summary", username, reponame, foldername)
 
-    def call_api(self, method: str, *resources: str) -> str:
+    def call_api(self, method: str, *resources: str) -> ApiResponse:
         url_route = "/".join([self._config.API_URL, *resources])
         result: requests.models.Response = getattr(requests, method)(url_route)
         if result.status_code >= 300:
             raise Exception(result.text)
-        return result.text
+        return ApiResponse(result.status_code, result.text)

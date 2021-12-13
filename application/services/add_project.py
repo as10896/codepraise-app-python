@@ -9,7 +9,11 @@ from infrastructure import ApiGateway
 
 class AddProject:
     def __call__(self, input: URLRequest) -> Result[Dict[str, Any], str]:
-        return flow(input, self.validate_input, bind(self.add_project))
+        return flow(
+            input,
+            self.validate_input,
+            bind(self.add_project),
+        )
 
     def validate_input(self, input: URLRequest) -> Result[Dict[str, Any], str]:
         if input.success:

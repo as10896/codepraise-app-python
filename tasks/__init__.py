@@ -6,4 +6,4 @@ from . import api
 from . import console
 
 
-ns = Collection(spec.spec, quality, api, console.console)
+ns = Collection(spec, api, console, quality)

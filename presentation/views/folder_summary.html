@@ -1,16 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-  <h2>Folder: /{{ folder.name }}</h2>
+  <h2>Folder: /{{ name }}</h2>
+  {% if result.ok %}
   <table class="table" id="repos_table">
     <thead>
       <tr>
         <th>
           {% for contributor in folder.contributors %}
-          <th>
-            {{ contributor.name }}
-          </th>
-          {% endfor %}
+        <th>
+          {{ contributor.name }}
+        </th>
+        {% endfor %}
         </th>
       </tr>
     </thead>
@@ -70,5 +71,6 @@
 
     </tbody>
   </table>
+  {% endif %}
 </div>
 {% endblock %}

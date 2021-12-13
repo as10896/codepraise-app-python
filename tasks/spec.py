@@ -1,10 +1,10 @@
 from invoke import task
 
 
-@task
+@task(default=True)
 def spec(c):
     """
-    run tests
+    Run tests
     """
     c.run(
         f"pytest -s -v spec/*_spec.py",

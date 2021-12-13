@@ -12,7 +12,7 @@ from .forms import URLRequest
 from .representers import ReposRepresenter, FolderSummaryRepresenter
 from .services import AddProject
 from config import get_settings
-from infrastructure import ApiGateway
+from infrastructure import ApiResponse, ApiGateway
 
 
 config = get_settings()
@@ -27,7 +27,7 @@ templates.env.globals["get_flashed_messages"] = get_flashed_messages
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
-    repos_json: str = ApiGateway().all_repos()
+    repos_json: str = ApiGateway().all_repos().message
     all_repos: ReposRepresenter = ReposRepresenter.parse_raw(repos_json)
     projects = AllProjects(all_repos)
 
@@ -55,23 +55,34 @@ def create_repo(request: Request, create_request: URLRequest = Depends()):
 
 @app.get("/repo/{ownername}/{reponame}")
 def summary_for_entire_repo(ownername: str, reponame: str, request: Request):
-    summary_json: str = ApiGateway().folder_summary(ownername, reponame, "")
-    summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(summary_json)
-    folder_summary = FolderSummaryView(summary, request.url.path)
+    result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, "")
+    view_info = {"request": request, "result": result, "name": ""}
+    if result.processing:
+        flash(request, "Repo being cloned, please check back in a moment", "notice")
+        view_info["folder"] = None
+    else:
+        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
+            result.message
+        )
+        folder_summary = FolderSummaryView(summary, request.url.path)
+        view_info["folder"] = folder_summary
 
-    return templates.TemplateResponse(
-        "folder_summary.html", {"request": request, "folder": folder_summary}
-    )
+    return templates.TemplateResponse("folder_summary.html", view_info)
 
 
 @app.get("/repo/{ownername}/{reponame}/{folder:path}")
 def summary_for_specific_folder(
     ownername: str, reponame: str, folder: str, request: Request
 ):
-    summary_json: str = ApiGateway().folder_summary(ownername, reponame, folder)
-    summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(summary_json)
-    folder_summary = FolderSummaryView(summary, request.url.path)
+    result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, folder)
+    view_info = {"request": request, "result": result, "name": folder}
+    if result.processing:
+        flash(request, "Repo being cloned, please check back in a moment", "notice")
+    else:
+        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
+            result.message
+        )
+        folder_summary = FolderSummaryView(summary, request.url.path)
+        view_info["folder"] = folder_summary
 
-    return templates.TemplateResponse(
-        "folder_summary.html", {"request": request, "folder": folder_summary}
-    )
+    return templates.TemplateResponse("folder_summary.html", view_info)

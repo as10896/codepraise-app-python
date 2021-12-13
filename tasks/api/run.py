@@ -11,7 +11,7 @@ from invoke import task
 )
 def run(c, mode="development", reload=False, port=3000):
     """
-    run fastapi server with specified settings
+    Run fastapi server with specified settings
     """
     if reload:
         c.run(
@@ -24,7 +24,7 @@ def run(c, mode="development", reload=False, port=3000):
 @task(help={"port": "Bind socket to this port.  [default: 3000]"})
 def dev(c, port=3000):
     """
-    rerun fastapi server in development environment
+    Rerun fastapi server in development environment
     """
     c.run(
         f"ENV=development uvicorn application.app:app --reload --port {port}", pty=True
@@ -34,6 +34,6 @@ def dev(c, port=3000):
 @task(help={"port": "Bind socket to this port.  [default: 3030]"})
 def test(c, port=3030):
     """
-    run fastapi server in test environment
+    Run fastapi server in test environment
     """
     c.run(f"ENV=test uvicorn application.app:app --port {port}", pty=True)
