@@ -1,5 +1,6 @@
 # codepraise-app-python
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 Web client for [codepraise-api-python](https://github.com/as10896/codepraise-api-python).
 
@@ -36,7 +37,7 @@ inv api.run.test -p [port]  # run FastAPI server in test environment
 inv quality.style  # examine coding style with flake8
 inv quality.metric  # measure code metric with radon
 inv quality.all  # run all quality tasks (style + metric)
-inv quality.reformat  # reformat your code using the black code style
+inv quality.reformat  # reformat your code using isort and the black coding style
 inv quality.typecheck  # check type with mypy
 inv quality  # same as `inv quality.all`
 ```

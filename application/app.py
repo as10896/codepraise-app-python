@@ -1,19 +1,19 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.middleware.sessions import SessionMiddleware
-from returns.result import Result
 from returns.pipeline import is_successful
+from returns.result import Result
+from starlette.middleware.sessions import SessionMiddleware
 
-from .helpers import flash, get_flashed_messages
-from .views import AllProjects, FolderSummaryView
-from .forms import URLRequest
-from .representers import ReposRepresenter, FolderSummaryRepresenter
-from .services import AddProject
 from config import get_settings
-from infrastructure import ApiResponse, ApiGateway
+from infrastructure import ApiGateway, ApiResponse
 
+from .forms import URLRequest
+from .helpers import flash, get_flashed_messages
+from .representers import FolderSummaryRepresenter, ReposRepresenter
+from .services import AddProject
+from .views import AllProjects, FolderSummaryView
 
 config = get_settings()
 app = FastAPI()

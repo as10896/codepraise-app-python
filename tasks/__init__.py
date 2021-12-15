@@ -1,9 +1,5 @@
 from invoke import Collection
 
-from . import spec
-from . import quality
-from . import api
-from . import console
-
+from . import api, console, quality, spec
 
 ns = Collection(spec, api, console, quality)

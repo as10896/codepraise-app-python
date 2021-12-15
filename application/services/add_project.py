@@ -1,10 +1,12 @@
-from typing import Dict, Any
-from returns.result import Result, Success, Failure
+from typing import Any, Dict
+
 from returns.pipeline import flow
 from returns.pointfree import bind
+from returns.result import Failure, Result, Success
+
+from infrastructure import ApiGateway
 
 from ..forms import URLRequest
-from infrastructure import ApiGateway
 
 
 class AddProject:

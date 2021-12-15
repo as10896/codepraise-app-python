@@ -23,6 +23,7 @@ selenium = "*"
 webdriver-manager = "*"  # to automatically install webdriver for Selenium
 flake8 = "*"
 radon = "*"
+isort = "*"
 black = "*"
 regex = "==2021.09.30"  # to fix the library validation error of `black`
 mypy = "*"

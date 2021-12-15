@@ -1,9 +1,10 @@
-from typing import List, Dict, Iterable, Set
-from itertools import starmap, chain
 from functools import total_ordering
+from itertools import chain, starmap
+from typing import Dict, Iterable, List, Set
+
+from typing_helpers import Contribution, ContributorEmail
 
 from ..representers import FolderSummaryRepresenter
-from typing_helpers import ContributorEmail, Contribution
 
 
 class ContributorView:

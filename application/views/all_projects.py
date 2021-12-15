@@ -1,7 +1,7 @@
 from typing import List
 
-from .project import Project
 from ..representers import ReposRepresenter
+from .project import Project
 
 
 # View object for colelction of Github projects
