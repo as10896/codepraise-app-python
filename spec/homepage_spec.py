@@ -1,8 +1,10 @@
+from typing import Iterator
+
 from .spec_helper import *
 
 
 @pytest.fixture(scope="module")
-def driver():
+def driver() -> Iterator[webdriver.Chrome]:
     options = webdriver.ChromeOptions()
     options.headless = True  # Operating in headless mode
     driver_manager = ChromeDriverManager()
@@ -16,7 +18,7 @@ def driver():
 
 
 @pytest.fixture(autouse=True)
-def delete_all_repos():
+def delete_all_repos() -> None:
     ApiGateway().delete_all_repos()
 
 
