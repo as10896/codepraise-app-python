@@ -61,7 +61,7 @@ class ApiGateway:
         return self.call_api("get", "summary", username, reponame, foldername)
 
     def call_api(self, method: str, *resources: str) -> ApiResponse:
-        url_route = "/".join([self._config.API_URL, *resources])
+        url_route = "/".join([self._config.API_HOST, self._config.API_VER, *resources])
         result: requests.models.Response = getattr(requests, method)(url_route)
         if result.status_code >= 300:
             raise Exception(result.text)

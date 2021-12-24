@@ -15,10 +15,11 @@ def run(c, mode="development", reload=False, port=3000):
     """
     if reload:
         c.run(
-            f"ENV={mode} uvicorn application.app:app --reload --port {port}", pty=True
+            f"ENV={mode} uvicorn application.controllers.app:app --reload --port {port}",
+            pty=True,
         )
     else:
-        c.run(f"ENV={mode} uvicorn application.app:app --port {port}", pty=True)
+        c.run(f"ENV={mode} uvicorn application.controllers.app:app --port {port}", pty=True)
 
 
 @task(help={"port": "Bind socket to this port.  [default: 3000]"})
@@ -27,7 +28,8 @@ def dev(c, port=3000):
     Rerun fastapi server in development environment
     """
     c.run(
-        f"ENV=development uvicorn application.app:app --reload --port {port}", pty=True
+        f"ENV=development uvicorn application.controllers.app:app --reload --port {port}",
+        pty=True,
     )
 
 
@@ -36,4 +38,4 @@ def test(c, port=3030):
     """
     Run fastapi server in test environment
     """
-    c.run(f"ENV=test uvicorn application.app:app --port {port}", pty=True)
+    c.run(f"ENV=test uvicorn application.controllers.app:app --port {port}", pty=True)

@@ -5,7 +5,8 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    API_URL: str
+    API_HOST: str
+    API_VER: str
     SESSION_SECRET: str
 
 

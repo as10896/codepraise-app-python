@@ -1,8 +1,53 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-  <h2>Folder: /{{ name }}</h2>
-  {% if result.ok %}
+  {% if result.processing %}
+  <div class="progress">
+    <div
+      class="progress-bar progress-bar-success progress-bar-striped active"
+      role="progressbar"
+      aria-valuenow="10"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      style="width: 0%"
+    ></div>
+  </div>
+  <script>
+    const wsHost = "{{ processing.ws_host }}"
+    const channelId = "{{ processing.ws_channel_id }}"
+    const ws = new WebSocket(`${wsHost}/progress/${channelId}`)
+    const bar = document.getElementsByClassName("progress-bar")[0]
+    const reg = /\: (\d+)%/
+
+    ws.onmessage = function(event) {
+      // Collect progressbar element and percentage
+      const progress = bar.getAttribute("style")
+      const currentProgress = reg.exec(progress)[1]  // problematic
+
+      const message = event.data
+      if (isNaN(message)) {
+        bar.setAttribute("style", "width: 100%")
+        bar.setAttribute("class", "progress-bar progress-bar-danger progress-bar-striped")
+        bar.innerHTML = message
+      } else {
+        if (parseInt(message) > parseInt(currentProgress)) {
+          // Set the progress bar and percentage
+          bar.setAttribute("aria-valuenow", message)
+          bar.setAttribute("style", `width: ${message}%`)
+          bar.innerHTML = `${message}%`
+
+          // Reoad page at 100%
+          if (message == "100") {
+            setTimeout(function () {
+              window.location = window.location.href.split('?')[0]
+            }, 1000)
+          }
+        }
+      }
+    }
+  </script>
+  {% else %}
+  <h2>Folder: /{{ folder.name }}</h2>
   <table class="table" id="repos_table">
     <thead>
       <tr>

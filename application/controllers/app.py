@@ -9,11 +9,11 @@ from starlette.middleware.sessions import SessionMiddleware
 from config import get_settings
 from infrastructure import ApiGateway, ApiResponse
 
-from .forms import URLRequest
-from .helpers import flash, get_flashed_messages
-from .representers import FolderSummaryRepresenter, ReposRepresenter
-from .services import AddProject
-from .views import AllProjects, FolderSummaryView
+from ..forms import URLRequest
+from ..representers import FolderSummaryRepresenter, ReposRepresenter
+from ..services import AddProject
+from ..views import AllProjects, FolderSummaryView, ProcessingView
+from .route_helpers import flash, get_flashed_messages
 
 config = get_settings()
 app = FastAPI()
@@ -56,10 +56,10 @@ def create_repo(request: Request, create_request: URLRequest = Depends()):
 @app.get("/repo/{ownername}/{reponame}")
 def summary_for_entire_repo(ownername: str, reponame: str, request: Request):
     result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, "")
-    view_info = {"request": request, "result": result, "name": ""}
+    view_info = {"request": request, "result": result}
     if result.processing:
-        flash(request, "Repo being cloned, please check back in a moment", "notice")
-        view_info["folder"] = None
+        flash(request, "Repo being processed", "notice")
+        view_info["processing"] = ProcessingView(result)
     else:
         summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
             result.message
@@ -75,9 +75,10 @@ def summary_for_specific_folder(
     ownername: str, reponame: str, folder: str, request: Request
 ):
     result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, folder)
-    view_info = {"request": request, "result": result, "name": folder}
+    view_info = {"request": request, "result": result}
     if result.processing:
-        flash(request, "Repo being cloned, please check back in a moment", "notice")
+        flash(request, "Repo being processed", "notice")
+        view_info["processing"] = ProcessingView(result)
     else:
         summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
             result.message
