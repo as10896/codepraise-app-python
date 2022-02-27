@@ -23,7 +23,7 @@ python -c "import secrets; print(secrets.token_hex(16))"
 ```
 
 
-## Usage
+## CLI usage
 Here we use [invoke](https://docs.pyinvoke.org/) as our task management tool.
 
 ```bash
