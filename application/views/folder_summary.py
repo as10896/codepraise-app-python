@@ -1,8 +1,8 @@
 from functools import total_ordering
 from itertools import chain, starmap
-from typing import Dict, Iterable, List, Set
+from typing import Dict, Iterable, List, Set, Tuple
 
-from typing_helpers import Contribution, ContributorEmail
+from typing_helpers import Contribution, ContributorEmail, SubfolderLink, SubfolderName
 
 from ..representers import FolderSummaryRepresenter
 
@@ -70,7 +70,7 @@ class AssetContribution:
         return self._contributions
 
     @property
-    def link(self) -> str:
+    def link(self) -> SubfolderLink:
         return ""
 
     def __lt__(self, other) -> bool:
@@ -82,7 +82,7 @@ class AssetContribution:
 
 class SubfolderContribution(AssetContribution):
     @property
-    def link(self) -> str:
+    def link(self) -> SubfolderLink:
         return "/".join([self.base_path, self.name])
 
 
@@ -94,6 +94,30 @@ class FolderSummaryView:
     @property
     def name(self) -> str:
         return self._summary.folder_name
+
+    @property
+    def breadcrumb(
+        self,
+    ) -> Tuple[List[Tuple[SubfolderName, SubfolderLink]], SubfolderName]:
+        splits: List[str] = self._request_path.split("/")
+        ownername: str = splits[2]
+        reponame: str = splits[3]
+        root_request_path: str = f"/repo/{ownername}/{reponame}"
+        remaining: List[str] = splits[4:]
+
+        if not remaining:
+            return [], reponame
+
+        breadcrumb_items: List[Tuple[str, str]] = [(reponame, root_request_path)]
+
+        subfolder_href = root_request_path
+        for subdir in remaining[:-1]:
+            subfolder_href = f"{subfolder_href}/{subdir}"
+            breadcrumb_items.append((subdir, subfolder_href))
+
+        current_dir: str = remaining[-1]
+
+        return breadcrumb_items, current_dir
 
     @property
     def base_folder(self) -> SubfolderContribution:

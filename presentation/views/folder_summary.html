@@ -47,19 +47,37 @@
     }
   </script>
   {% else %}
-  <h2>Folder: /{{ folder.name }}</h2>
+  <div class="row">
+    <div class="col-12 col-sm-2 col-lg-1">
+      <h5>Folder:</h5>
+    </div>
+    <div class="col">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          {% set breadcrumb_items, current_dir = folder.breadcrumb %}
+          {% for breadcrumb_item in breadcrumb_items %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb_item[1] }}">{{ breadcrumb_item[0] }}</a></li>
+          {% endfor %}
+          <li class="breadcrumb-item active" aria-current="page">{{ current_dir }}</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+    
   <table class="table" id="repos_table">
+
     <thead>
       <tr>
         <th>
           {% for contributor in folder.contributors %}
-        <th>
-          {{ contributor.name }}
-        </th>
-        {% endfor %}
+          <th>
+            {{ contributor.name }}
+          </th>
+          {% endfor %}
         </th>
       </tr>
     </thead>
+
     <tbody>
 
       {% for sub in folder.subfolders %}
