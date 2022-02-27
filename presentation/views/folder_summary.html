@@ -2,15 +2,19 @@
 {% block content %}
 <div class="container">
   {% if result.processing %}
-  <div class="progress">
-    <div
-      class="progress-bar progress-bar-success progress-bar-striped active"
-      role="progressbar"
-      aria-valuenow="10"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      style="width: 0%"
-    ></div>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-9 col-xl-7 col-xxl-6">
+      <div class="progress">
+        <div
+          class="progress-bar progress-bar-success active"
+          role="progressbar"
+          aria-valuenow="10"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          style="width: 0%"
+        ></div>
+      </div>
+    </div>
   </div>
   <script>
     const wsHost = "{{ processing.ws_host }}"
@@ -47,93 +51,84 @@
     }
   </script>
   {% else %}
-  <div class="row">
-    <div class="col-12 col-sm-2 col-lg-1">
-      <h5>Folder:</h5>
-    </div>
-    <div class="col">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          {% set breadcrumb_items, current_dir = folder.breadcrumb %}
-          {% for breadcrumb_item in breadcrumb_items %}
-          <li class="breadcrumb-item"><a href="{{ breadcrumb_item[1] }}">{{ breadcrumb_item[0] }}</a></li>
-          {% endfor %}
-          <li class="breadcrumb-item active" aria-current="page">{{ current_dir }}</li>
-        </ol>
-      </nav>
-    </div>
-  </div>
+
+  <nav aria-label="breadcrumb">
+    <i class="mdi mdi-folder-open-outline" aria-hidden="true"></i>
+    <ol class="breadcrumb d-inline">
+      {% set breadcrumb_items, current_dir = folder.breadcrumb %}
+      {% for breadcrumb_item in breadcrumb_items %}
+      <li class="breadcrumb-item d-inline-block"><a href="{{ breadcrumb_item[1] }}">{{ breadcrumb_item[0] }}</a></li>
+      {% endfor %}
+      <li class="breadcrumb-item active d-inline-block" aria-current="page">{{ current_dir }}</li>
+    </ol>
+  </nav>
     
-  <table class="table" id="repos_table">
-
-    <thead>
-      <tr>
-        <th>
-          {% for contributor in folder.contributors %}
+  <div class="row justify-content-center">
+    <table class="table" id="repos_table">
+      <thead>
+        <tr>
           <th>
-            {{ contributor.name }}
+            {% for contributor in folder.contributors %}
+            <th>{{ contributor.name }}</th>
+            {% endfor %}
           </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in folder.subfolders %}
+        <tr>
+          <td>
+            <a href="{{ sub.link }}">
+              <span>{{ sub.name }}/</span>
+            </a>
+          </td>
+          {% for contributor in folder.contributors %}
+          <td>
+            <span>{{ sub.contributions[contributor] }}</span>
+          </td>
           {% endfor %}
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-
-      {% for sub in folder.subfolders %}
-      <tr>
-        <td>
-          <a href="{{ sub.link }}">
-            <span>{{ sub.name }}/</span>
-          </a>
-        </td>
-        {% for contributor in folder.contributors %}
-        <td>
-          <span>{{ sub.contributions[contributor] }}</span>
-        </td>
+        </tr>
+        <tr>
+          {% for _ in range(folder.contributors | length + 1) %}
+          <td></td>
+          {% endfor %}
+        </tr>
         {% endfor %}
-      </tr>
-      <tr>
-        {% for _ in range(folder.contributors | length + 1) %}
-        <td></td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
 
-      <tr>
-        <td>
-          <span>
-            files
-          </span>
-        </td>
-        {% for contributor in folder.contributors %}
-        <td>
-          <span>
-            {{ folder.base_folder.contributions[contributor] }}
-          </span>
-        </td>
-        {% endfor %}
-      </tr>
+        <tr>
+          <td>
+            <span>
+              files
+            </span>
+          </td>
+          {% for contributor in folder.contributors %}
+          <td>
+            <span>
+              {{ folder.base_folder.contributions[contributor] }}
+            </span>
+          </td>
+          {% endfor %}
+        </tr>
 
-      {% for sub in folder.base_files %}
-      <tr>
-        <td>
-          <span>
-            {{ sub.name }}
-          </span>
-        </td>
-        {% for contributor in folder.contributors %}
-        <td>
-          <span>
-            {{ sub.contributions[contributor] }}
-          </span>
-        </td>
+        {% for sub in folder.base_files %}
+        <tr>
+          <td>
+            <span>
+              {{ sub.name }}
+            </span>
+          </td>
+          {% for contributor in folder.contributors %}
+          <td>
+            <span>
+              {{ sub.contributions[contributor] }}
+            </span>
+          </td>
+          {% endfor %}
+        </tr>
         {% endfor %}
-      </tr>
-      {% endfor %}
-
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
   {% endif %}
 </div>
 {% endblock %}
