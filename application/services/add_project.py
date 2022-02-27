@@ -4,7 +4,7 @@ from returns.pipeline import flow
 from returns.pointfree import bind
 from returns.result import Failure, Result, Success
 
-from infrastructure import ApiGateway
+from infrastructure import ApiGateway, ApiResponse
 
 from ..forms import URLRequest
 
@@ -25,8 +25,9 @@ class AddProject:
             return Failure("; ".join(input.errors.values()))
 
     def add_project(self, input: Dict[str, Any]) -> Result[Dict[str, Any], str]:
-        try:
-            ApiGateway().create_repo(input["ownername"], input["reponame"])
-            return Success(input)
-        except Exception as e:
-            return Failure(str(e))
+        result: ApiResponse = ApiGateway().create_repo(
+            input["ownername"], input["reponame"]
+        )
+        if result.failure:
+            return Failure(result.message["error"])
+        return Success(input)
