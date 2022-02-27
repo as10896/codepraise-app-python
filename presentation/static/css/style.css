@@ -2,6 +2,16 @@ h1 {
   font-weight: bold;
 }
 
+#main_header {
+  text-align: center;
+  margin-top: 10vh;
+} 
+
+#main_header a {
+  color: black;
+  text-decoration: none;
+}
+
 .posting.body {
   font-size: 1.2em;
 }
@@ -38,9 +48,17 @@ h1 {
   height: 30px;
 }
 
-.query-bar {
-  background-color: #EEEEEE;
-  padding: 5px 5px 5px 5px;
+#url_input {
+  height: 50px;
+  background-color: #F6F6F6;
+  padding-right: 50px;
+}
+
+#repo_form_submit {
+  height: 50px;
+  width: 50px;
+  margin-left: -50px;
+  background-color: #646EF8;
 }
 
 footer {
