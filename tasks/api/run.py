@@ -19,7 +19,10 @@ def run(c, mode="development", reload=False, port=3000):
             pty=True,
         )
     else:
-        c.run(f"ENV={mode} uvicorn application.controllers.app:app --port {port}", pty=True)
+        c.run(
+            f"ENV={mode} uvicorn application.controllers.app:app --port {port}",
+            pty=True,
+        )
 
 
 @task(help={"port": "Bind socket to this port.  [default: 3000]"})

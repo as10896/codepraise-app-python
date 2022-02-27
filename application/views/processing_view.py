@@ -1,4 +1,3 @@
-import json
 import re
 
 from config import get_settings
@@ -12,7 +11,7 @@ class ProcessingView:
 
     @property
     def ws_channel_id(self) -> str:
-        return json.loads(self._result.message)["message"]["id"]
+        return self._result.message["message"]["id"]
 
     @property
     def ws_host(self) -> str:

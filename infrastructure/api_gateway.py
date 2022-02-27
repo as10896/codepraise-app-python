@@ -1,3 +1,6 @@
+import json
+from typing import Any, Dict
+
 import requests
 
 from config import Settings, get_settings
@@ -23,12 +26,20 @@ class ApiResponse:
         self._status = self.HTTP_STATUS[code]
 
     @property
+    def success(self) -> True:
+        return 200 <= self._code <= 299
+
+    @property
+    def failure(self) -> True:
+        return not self.success
+
+    @property
     def code(self) -> int:
         return self._code
 
     @property
-    def message(self) -> str:
-        return self._message
+    def message(self) -> Dict[str, Any]:
+        return json.loads(self._message)
 
     @property
     def ok(self) -> bool:
@@ -63,6 +74,4 @@ class ApiGateway:
     def call_api(self, method: str, *resources: str) -> ApiResponse:
         url_route = "/".join([self._config.API_HOST, self._config.API_VER, *resources])
         result: requests.models.Response = getattr(requests, method)(url_route)
-        if result.status_code >= 300:
-            raise Exception(result.text)
         return ApiResponse(result.status_code, result.text)

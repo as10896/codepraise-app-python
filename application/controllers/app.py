@@ -28,7 +28,7 @@ templates.env.globals["get_flashed_messages"] = get_flashed_messages
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     repos_json: str = ApiGateway().all_repos().message
-    all_repos: ReposRepresenter = ReposRepresenter.parse_raw(repos_json)
+    all_repos: ReposRepresenter = ReposRepresenter.parse_obj(repos_json)
     projects = AllProjects(all_repos)
 
     if projects.none:
@@ -57,11 +57,17 @@ def create_repo(request: Request, create_request: URLRequest = Depends()):
 def summary_for_entire_repo(ownername: str, reponame: str, request: Request):
     result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, "")
     view_info = {"request": request, "result": result}
-    if result.processing:
+
+    if result.failure:
+        flash(request, result.message["error"], "error")
+        return RedirectResponse("/", status_code=303)
+
+    elif result.processing:
         flash(request, "Repo being processed", "notice")
         view_info["processing"] = ProcessingView(result)
+
     else:
-        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
+        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_obj(
             result.message
         )
         folder_summary = FolderSummaryView(summary, request.url.path)
@@ -76,11 +82,17 @@ def summary_for_specific_folder(
 ):
     result: ApiResponse = ApiGateway().folder_summary(ownername, reponame, folder)
     view_info = {"request": request, "result": result}
-    if result.processing:
+
+    if result.failure:
+        flash(request, result.message["error"], "error")
+        return RedirectResponse("/", status_code=303)
+
+    elif result.processing:
         flash(request, "Repo being processed", "notice")
         view_info["processing"] = ProcessingView(result)
+
     else:
-        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_raw(
+        summary: FolderSummaryRepresenter = FolderSummaryRepresenter.parse_obj(
             result.message
         )
         folder_summary = FolderSummaryView(summary, request.url.path)
