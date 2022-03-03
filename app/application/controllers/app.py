@@ -12,7 +12,7 @@ from ...infrastructure import ApiGateway, ApiResponse
 from ..forms import URLRequest
 from ..representers import FolderSummaryRepresenter, ReposRepresenter
 from ..services import AddProject
-from ..views import AllProjects, FolderSummaryView, ProcessingView
+from ...presentation.view_objects import AllProjects, FolderSummaryView, ProcessingView
 from .route_helpers import flash, get_flashed_messages
 
 config = get_settings()

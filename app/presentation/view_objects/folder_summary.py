@@ -4,7 +4,7 @@ from typing import Dict, Iterable, List, Set, Tuple
 
 from typing_helpers import Contribution, ContributorEmail, SubfolderLink, SubfolderName
 
-from ..representers import FolderSummaryRepresenter
+from ...application.representers import FolderSummaryRepresenter
 
 
 class ContributorView:

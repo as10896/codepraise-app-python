@@ -1,6 +1,6 @@
 from typing import List
 
-from ..representers import ReposRepresenter
+from ...application.representers import ReposRepresenter
 from .project import Project
 
 
