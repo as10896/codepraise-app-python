@@ -21,7 +21,7 @@ app.add_middleware(SessionMiddleware, secret_key=config.SESSION_SECRET)
 
 app.mount("/static", StaticFiles(directory="app/presentation/static"), name="static")
 
-templates = Jinja2Templates(directory="app/presentation/views")
+templates = Jinja2Templates(directory="app/presentation/templates")
 templates.env.globals["get_flashed_messages"] = get_flashed_messages
 
 
