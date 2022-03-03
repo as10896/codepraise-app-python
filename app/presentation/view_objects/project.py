@@ -1,6 +1,6 @@
 from operator import attrgetter
 
-from ..representers import RepoRepresenter
+from ...application.representers import RepoRepresenter
 
 
 # View object for a single repo's Github project

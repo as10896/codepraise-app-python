@@ -1,7 +1,7 @@
 import re
 
 from config import get_settings
-from infrastructure import ApiResponse
+from ...infrastructure import ApiResponse
 
 
 # View object to capture progress bar information

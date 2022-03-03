@@ -7,21 +7,21 @@ from returns.result import Result
 from starlette.middleware.sessions import SessionMiddleware
 
 from config import get_settings
-from infrastructure import ApiGateway, ApiResponse
+from ...infrastructure import ApiGateway, ApiResponse
 
 from ..forms import URLRequest
 from ..representers import FolderSummaryRepresenter, ReposRepresenter
 from ..services import AddProject
-from ..views import AllProjects, FolderSummaryView, ProcessingView
+from ...presentation.view_objects import AllProjects, FolderSummaryView, ProcessingView
 from .route_helpers import flash, get_flashed_messages
 
 config = get_settings()
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=config.SESSION_SECRET)
 
-app.mount("/static", StaticFiles(directory="presentation/static"), name="static")
+app.mount("/static", StaticFiles(directory="app/presentation/static"), name="static")
 
-templates = Jinja2Templates(directory="presentation/views")
+templates = Jinja2Templates(directory="app/presentation/templates")
 templates.env.globals["get_flashed_messages"] = get_flashed_messages
 
 
