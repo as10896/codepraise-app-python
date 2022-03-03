@@ -15,12 +15,12 @@ def run(c, mode="development", reload=False, port=3000):
     """
     if reload:
         c.run(
-            f"ENV={mode} uvicorn application.controllers.app:app --reload --port {port}",
+            f"ENV={mode} uvicorn app.application.controllers.app:app --reload --port {port}",
             pty=True,
         )
     else:
         c.run(
-            f"ENV={mode} uvicorn application.controllers.app:app --port {port}",
+            f"ENV={mode} uvicorn app.application.controllers.app:app --port {port}",
             pty=True,
         )
 
@@ -31,7 +31,7 @@ def dev(c, port=3000):
     Rerun fastapi server in development environment
     """
     c.run(
-        f"ENV=development uvicorn application.controllers.app:app --reload --port {port}",
+        f"ENV=development uvicorn app.application.controllers.app:app --reload --port {port}",
         pty=True,
     )
 
@@ -41,4 +41,4 @@ def test(c, port=3030):
     """
     Run fastapi server in test environment
     """
-    c.run(f"ENV=test uvicorn application.controllers.app:app --port {port}", pty=True)
+    c.run(f"ENV=test uvicorn app.application.controllers.app:app --port {port}", pty=True)
