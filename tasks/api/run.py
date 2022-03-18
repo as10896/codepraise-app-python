@@ -4,17 +4,17 @@ from invoke import task
 @task(
     default=True,
     help={
-        "mode": "Deployment mode for running API server. ['test'|'development'|'production'] [default: 'development']",
+        "env": "Deployment environment for running API server. ['test'|'development'|'production'] [default: 'development']",
         "reload": "Restart your app when a file changes. This consumes much more resources and is more unstable. It helps a lot during development, but you shouldn't use it in production. [default: False]",
         "port": "Bind socket to this port. [default: 3000]",
         "host": "Bind socket to this host. [default: 127.0.0.1]",
     },
 )
-def run(c, mode="development", reload=False, port=3000, host="127.0.0.1"):
+def run(c, env="development", reload=False, port=3000, host="127.0.0.1"):
     """
     Run fastapi server with specified settings
     """
-    cmd = f"ENV={mode} uvicorn app.application.controllers.app:app"
+    cmd = f"ENV={env} uvicorn app.application.controllers.app:app"
 
     if reload:
         cmd = f"{cmd} --reload"

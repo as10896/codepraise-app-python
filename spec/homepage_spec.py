@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from .spec_helper import *
+from .helper import *
 
 
 @pytest.fixture(scope="module")
