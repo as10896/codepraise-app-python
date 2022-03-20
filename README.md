@@ -5,28 +5,71 @@
 Web client for [codepraise-api-python](https://github.com/as10896/codepraise-api-python).
 
 ## Prerequisite
-### Create virtual environment
-Here we use [Pipenv](https://pipenv.pypa.io/en/latest/) to create our virtual environment.
+### Install Docker
+Make sure you have the latest version of [Docker 🐳](https://www.docker.com/get-started) installed on your local machine.
 
-```bash
-pip install pipenv  # install pipenv
-pipenv --python 3.9  # create Python 3.9 virtualenv under current directory
-pipenv shell  # activate the virtualenv of the current directory
-pipenv install --dev  # install required dependencies with Pipfile
-```
 ### Set up session secret for cookie-based session management
-Put your session secret key under `config/secrets/<env>/SESSION_SECRET`
+Put your session secret key under `config/secrets/<env>/SESSION_SECRET`.
 
-One way to generate a key is to use `secrets.token_hex()`
-```bash
-python -c "import secrets; print(secrets.token_hex(16))"
+Or just set the environment variable `SESSION_SECRET`:
+```shell
+export SESSION_SECRET=<your secret>
+```
+
+One way to generate a key is to use `openssl rand`
+```shell
+openssl rand -hex 32
+```
+
+## Run with Docker
+You can start the app easily with Docker Compose.
+
+Before starting, remember to run [API](https://github.com/as10896/codepraise-api-python#run-with-docker) in advance and make sure you have all the configurations set up as mentioned above.
+
+### Development
+
+Uvicorn (1 worker)
+```shell
+docker compose up -d  # run services in the background
+docker compose run --rm console  # run application console
+docker compose down  # shut down all the services
+```
+After starting, you can visit http://localhost:3000 to see the application's page.
+
+### Production
+Gunicorn + Uvicorn (4 workers)
+```shell
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  # run services in the background
+docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm console  # run application console
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down  # shut down all the servicesvolumes
+```
+After starting, you can visit http://localhost:3000 to see the application's page.
+
+### BDD Testing
+
+Before testing, remember to run API under [test environment](https://github.com/as10896/codepraise-api-python#testing) in advance.
+
+For users of Intel or AMD64 devices, you can run BDD testing as follows:
+```shell
+docker compose -f docker-compose.test.yml run --rm spec
+```
+
+If you're testing on ARM64 devices (e.g. Apple M1), use the following command instead:
+```shell
+docker compose -f docker-compose.test.yml run --rm spec-arm
 ```
 
 
-## CLI usage
+## Invoke tasks
 Here we use [invoke](https://docs.pyinvoke.org/) as our task management tool.
 
-```bash
+You can use the container's bash to test these commands.
+```shell
+docker compose run --rm bash
+```
+
+### Commands
+```shell
 inv -l  # show all tasks
 inv [task] -h  # show task help message
 inv console -e [env]  # run application console (ipython)
