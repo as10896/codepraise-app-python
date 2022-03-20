@@ -5,13 +5,22 @@ from .helper import *
 
 @pytest.fixture(scope="module")
 def driver() -> Iterator[webdriver.Chrome]:
+    config = get_settings()
     options = webdriver.ChromeOptions()
     options.headless = True  # Operating in headless mode
-    driver_manager = ChromeDriverManager()
-    driver_path: str = driver_manager.install()
-    service = Service(driver_path)
-    _driver = webdriver.Chrome(service=service, options=options)
+
+    if config.REMOTE_CHROME:
+        # test with Docker-hosted Chrome
+        _driver = webdriver.Remote(config.REMOTE_CHROME, options=options)
+    else:
+        # test with local Chrome
+        driver_manager = ChromeDriverManager()
+        driver_path: str = driver_manager.install()
+        service = Service(driver_path)
+        _driver = webdriver.Chrome(service=service, options=options)
+
     yield _driver
+
     # to prevent invisible headless browser instances from piling up on your machine
     _driver.close()
     _driver.quit()

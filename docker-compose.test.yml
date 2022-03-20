@@ -1,0 +1,64 @@
+x-test-app: &test-app
+  build:
+    args:
+      - INSTALL_DEV=true
+  image: codepraise-app-python:debug
+  volumes:
+    - ./config/secrets:/app/config/secrets
+  environment: &env
+    APP_URL: http://app:3030
+    API_HOST: http://host.docker.internal:8080
+    SESSION_SECRET:
+  extra_hosts:
+    # To resolve "host.docker.internal" when using Linux machines
+    # ref: https://medium.com/@TimvanBaarsen/how-to-connect-to-the-docker-host-from-inside-a-docker-container-112b4c71bc66
+    - "host.docker.internal:host-gateway"
+
+x-env-bdd: &env-bdd
+  REMOTE_CHROME: http://chrome:4444
+
+x-env-bdd-arm: &env-bdd-arm
+  REMOTE_CHROME: http://chromium-arm:4444
+
+services:
+  app:
+    <<: *test-app
+    command: inv api.run.test -h 0.0.0.0
+
+  chrome:
+    image: selenium/standalone-chrome:latest
+    profiles:
+      - bdd
+
+  # For ARM64 devices (e.g. Apple M1)
+  # ref: https://github.com/SeleniumHQ/docker-selenium#experimental-mult-arch-aarch64armhfamd64-images
+  chromium-arm:
+    image: seleniarm/standalone-chromium:latest
+    profiles:
+      - bdd-arm
+
+  # `docker compose -f docker-compose.test.yml run --rm spec`
+  spec:
+    <<: *test-app
+    depends_on:
+      - app
+      - chrome
+    profiles:
+      - bdd
+    environment:
+      <<: *env
+      <<: *env-bdd
+    command: sh -c "./bin/wait-for-it.sh http://chrome:4444 -- inv spec"
+
+  # `docker compose -f docker-compose.test.yml run --rm spec-arm`
+  spec-arm:
+    <<: *test-app
+    depends_on:
+      - app
+      - chromium-arm
+    profiles:
+      - bdd-arm
+    environment:
+      <<: *env
+      <<: *env-bdd-arm
+    command: sh -c "./bin/wait-for-it.sh http://chromium-arm:4444 -- inv spec"

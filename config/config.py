@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 class Test(Settings):
     environment = "test"
     APP_URL: str
+    REMOTE_CHROME: str = None
 
     class Config:
         env_file = "config/env/test.env"

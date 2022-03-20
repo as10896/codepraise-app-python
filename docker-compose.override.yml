@@ -1,0 +1,8 @@
+services:
+  # `docker compose up`
+  app:
+    command: inv api.run.dev -h 0.0.0.0
+
+  # `docker compose run --rm console`
+  console:
+    command: inv console -e development
