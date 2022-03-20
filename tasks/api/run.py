@@ -41,13 +41,18 @@ def dev(c, port=3000, host="127.0.0.1"):
     )
 
 
-@task(help={"port": "Bind socket to this port. [default: 3030]"})
-def test(c, port=3030):
+@task(
+    help={
+        "port": "Bind socket to this port. [default: 3030]",
+        "host": "Bind socket to this host. [default: 127.0.0.1]",
+    }
+)
+def test(c, port=3030, host="127.0.0.1"):
     """
     Run fastapi server in test environment
     """
     c.run(
-        f"ENV=test uvicorn app.application.controllers.app:app --port {port}",
+        f"ENV=test uvicorn app.application.controllers.app:app --host {host} --port {port}",
         pty=True,
     )
 

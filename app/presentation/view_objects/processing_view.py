@@ -16,5 +16,11 @@ class ProcessingView:
 
     @property
     def ws_host(self) -> str:
+        # If API is hosted locally with Docker, replace "host.docker.internal" with "localhost"
+        # since JavaScript running in the browser can't resolve "host.docker.internal"
+        _ws_host = re.sub("host.docker.internal", "localhost", get_settings().API_HOST)
+
         # replace "http://" with "ws://" and "https://" with "wss://"
-        return re.sub(r"^http", "ws", get_settings().API_HOST)
+        _ws_host = re.sub(r"^http", "ws", _ws_host)
+
+        return _ws_host

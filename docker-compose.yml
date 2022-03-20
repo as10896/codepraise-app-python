@@ -1,0 +1,37 @@
+x-app: &default-app
+  build:
+    args:
+      - INSTALL_DEV=${INSTALL_DEV:-false}
+  image: codepraise-app-python
+  volumes:
+    - ./config/secrets:/app/config/secrets
+  environment:
+    API_HOST: http://host.docker.internal:8000
+    SESSION_SECRET:
+  extra_hosts:
+    # To resolve "host.docker.internal" when using Linux machines
+    # ref: https://medium.com/@TimvanBaarsen/how-to-connect-to-the-docker-host-from-inside-a-docker-container-112b4c71bc66
+    - "host.docker.internal:host-gateway"
+
+services:
+  app:
+    <<: *default-app
+    ports:
+      - ${PORT:-3000}:3000
+
+  console:
+    <<: *default-app
+    profiles:
+      - debug
+
+  # `docker compose run --rm bash`
+  bash:
+    <<: *default-app
+    build:
+      args:
+        - INSTALL_DEV=true
+    image: codepraise-app-python:debug
+    tty: true
+    profiles:
+      - debug
+    command: bash
