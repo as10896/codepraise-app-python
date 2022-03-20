@@ -25,7 +25,7 @@ flake8 = "*"
 radon = "*"
 isort = "*"
 black = "*"
-regex = "==2021.09.30"  # to fix the library validation error of `black`
+regex = "==2021.10.21"  # to fix the library validation error of `black` when using Apple M1 devices
 mypy = "*"
 
 [requires]

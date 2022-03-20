@@ -5,7 +5,6 @@ from returns.pointfree import bind
 from returns.result import Failure, Result, Success
 
 from ...infrastructure import ApiGateway, ApiResponse
-
 from ..forms import URLRequest
 
 
