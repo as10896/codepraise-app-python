@@ -13,7 +13,7 @@ from ...presentation.view_objects import AllProjects, FolderSummaryView, Process
 from ..forms import URLRequest
 from ..representers import FolderSummaryRepresenter, ReposRepresenter
 from ..services import AddProject
-from .route_helpers import flash, get_flashed_messages
+from .route_helpers import flash, get_flashed_messages, url_for
 
 config = get_settings()
 
@@ -24,6 +24,7 @@ app.mount("/static", StaticFiles(directory="app/presentation/static"), name="sta
 
 templates = Jinja2Templates(directory="app/presentation/templates")
 templates.env.globals["get_flashed_messages"] = get_flashed_messages
+templates.env.globals["url_for"] = url_for
 
 
 @app.get("/", response_class=HTMLResponse)

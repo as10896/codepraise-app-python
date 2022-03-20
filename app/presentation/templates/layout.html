@@ -3,17 +3,17 @@
   <head>
     <title>CodePraise</title>
     <!-- Bootstrap CSS and theme (United Theme) -->
-    <link href="{{ url_for('static', path='/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for(request, 'static', path='/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='/images/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for(request, 'static', path='/images/favicon.ico') }}">
 
     <!-- Custom CSS -->
-    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for(request, 'static', path='/css/style.css') }}" rel="stylesheet">
     
     <!-- JQuery and Bootstrap JS -->
-    <script src="{{ url_for('static', path='/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for(request, 'static', path='/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for(request, 'static', path='/js/bootstrap.bundle.min.js') }}"></script>
   </head>
   <body>
     <div class="container" id="html_body">
