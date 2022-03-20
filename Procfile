@@ -1,1 +1,0 @@
-web: inv api.run.prod -p ${PORT:-3000}

@@ -8,10 +8,6 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y gcc
 
-# To see release phase streaming logs of Heroku
-ARG HEROKU_DEPLOY=false
-RUN if [ ${HEROKU_DEPLOY} = "true" ] ; then apt-get install curl ; fi
-
 # To print directly to stdout instead of buffering output
 ENV PYTHONUNBUFFERED=true
 
