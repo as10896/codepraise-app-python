@@ -2,7 +2,11 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-Web client for [codepraise-api-python](https://github.com/as10896/codepraise-api-python).
+This is a Python reproduction of [ISS-SOA/codepraise](https://github.com/ISS-SOA/codepraise), a demo project for NTHU Service-Oriented Architecture course (for practice only).
+
+For API / Notifier, please visit [codepraise-api-python](https://github.com/as10896/codepraise-api-python) / [codepraise-clone-notifier-python](https://github.com/as10896/codepraise-clone-notifier-python).
+
+The live version can be found [here](https://codepraise-app-python.herokuapp.com/).
 
 ## Prerequisite
 ### Install Docker
