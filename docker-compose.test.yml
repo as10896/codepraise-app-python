@@ -26,14 +26,14 @@ services:
     command: inv api.run.test -h 0.0.0.0
 
   chrome:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome:4.1.2-20220317
     profiles:
       - bdd
 
   # For ARM64 devices (e.g. Apple M1)
   # ref: https://github.com/SeleniumHQ/docker-selenium#experimental-mult-arch-aarch64armhfamd64-images
   chromium-arm:
-    image: seleniarm/standalone-chromium:latest
+    image: seleniarm/standalone-chromium:4.0.0-20211213
     profiles:
       - bdd-arm
 
