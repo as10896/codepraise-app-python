@@ -1,16 +1,24 @@
-# codepraise-app-python
+# CodePraise Python APP
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-This is a Python reproduction of [ISS-SOA/codepraise](https://github.com/ISS-SOA/codepraise), a demo project for NTHU Service-Oriented Architecture course (for practice only).
+---
 
-For API / Notifier, please visit [codepraise-api-python](https://github.com/as10896/codepraise-api-python) / [codepraise-clone-notifier-python](https://github.com/as10896/codepraise-clone-notifier-python).
+**Documentation**: <a href="https://as10896.github.io/codepraise-app-python" target="_blank">https://as10896.github.io/codepraise-app-python</a>
 
-The live version can be found [here](https://codepraise-app-python.herokuapp.com/).
+**Source Code**: <a href="https://github.com/as10896/codepraise-app-python" target="_blank">https://github.com/as10896/codepraise-app-python</a>
+
+---
+
+This is a Python reproduction of <a href="https://github.com/ISS-SOA/codepraise" target="_blank">ISS-SOA/codepraise</a>, a demo project for NTHU Service-Oriented Architecture course (for self practice only).
+
+For API / Notifier, please visit <a href="https://as10896.github.io/codepraise-api-python/" target="_blank">codepraise-api-python</a> / <a href="https://as10896.github.io/codepraise-clone-notifier-python/" target="_blank">codepraise-clone-notifier-python</a>.
+
+The live version can be found <a href="https://codepraise-app-python.herokuapp.com/" target="_blank">here</a>.
 
 ## Prerequisite
 ### Install Docker
-Make sure you have the latest version of [Docker 🐳](https://www.docker.com/get-started) installed on your local machine.
+Make sure you have the latest version of <a href="https://www.docker.com/get-started" target="_blank">Docker 🐳</a> installed on your local machine.
 
 ### Set up session secret for cookie-based session management
 Put your session secret key under `config/secrets/<env>/SESSION_SECRET`.
@@ -28,7 +36,7 @@ openssl rand -hex 32
 ## Run with Docker
 You can start the app easily with Docker Compose.
 
-Before starting, remember to run [API](https://github.com/as10896/codepraise-api-python#run-with-docker) in advance and make sure you have all the configurations set up as mentioned above.
+Before starting, remember to run <a href="https://as10896.github.io/codepraise-api-python/docker/" target="_blank">API</a> in advance and make sure you have all the configurations set up as mentioned before.
 
 ### Development
 
@@ -38,7 +46,7 @@ docker compose up -d  # run services in the background
 docker compose run --rm console  # run application console
 docker compose down  # shut down all the services
 ```
-After starting, you can visit http://localhost:3000 to see the application's page.
+After starting, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
 
 ### Production
 Gunicorn + Uvicorn (4 workers)
@@ -47,11 +55,11 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  # run ser
 docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm console  # run application console
 docker compose -f docker-compose.yml -f docker-compose.prod.yml down  # shut down all the servicesvolumes
 ```
-After starting, you can visit http://localhost:3000 to see the application's page.
+After starting, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
 
 ### BDD Testing
 
-Before testing, remember to run API under [test environment](https://github.com/as10896/codepraise-api-python#testing) in advance.
+Before testing, remember to run API under <a href="https://as10896.github.io/codepraise-api-python/docker/#testing" target="_blank">test environment</a> in advance.
 
 For users of Intel or AMD64 devices, you can run BDD testing as follows:
 ```shell
@@ -65,7 +73,7 @@ docker compose -f docker-compose.test.yml run --rm spec-arm
 
 
 ## Invoke tasks
-Here we use [invoke](https://docs.pyinvoke.org/) as our task management tool.
+Here we use <a href="https://docs.pyinvoke.org/" target="_blank">Invoke</a> as our task management tool.
 
 You can use the container's bash to test these commands.
 ```shell

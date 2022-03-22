@@ -1,0 +1,18 @@
+site_name: CodePraise Python
+repo_name: codepraise-app-python
+repo_url: https://github.com/as10896/codepraise-app-python
+theme:
+  name: material
+  palette:
+    primary: indigo
+  features:
+    - search.suggest
+    - search.highlight
+markdown_extensions:
+  - toc:
+      permalink: true
+nav:
+  - Introduction: index.md
+  - prerequisite.md
+  - docker.md
+  - invoke.md
