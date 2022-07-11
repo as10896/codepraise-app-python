@@ -23,7 +23,7 @@ services:
   bdd-app:
     <<: *test-app
     command: inv api.run.test -h 0.0.0.0  # host 0.0.0.0 is necessary for connecting with Selenium WebDriver
-  
+
   chrome:
     image: selenium/standalone-chrome:4.3.0-20220706
     profiles:

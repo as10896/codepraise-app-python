@@ -38,6 +38,7 @@ radon = "^5.1.0"
 isort = "^5.10.1"
 black = "^22.6.0"
 mypy = "^0.961"
+pre-commit = "^2.20.0"
 
 
 [tool.poetry.group.test]
