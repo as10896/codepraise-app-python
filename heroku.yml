@@ -1,5 +1,7 @@
 build:
   docker:
-    web: Dockerfile
+    web:
+      dockerfile: Dockerfile
+      target: production
 run:
   web: inv api.run.prod -p ${PORT:-3000} -w 2

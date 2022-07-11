@@ -36,7 +36,7 @@ openssl rand -hex 32
 ## Run with Docker
 You can start the app easily with Docker Compose.
 
-Before starting, remember to run <a href="https://as10896.github.io/codepraise-api-python/docker/" target="_blank">API</a> in advance and make sure you have all the configurations set up as mentioned before.
+Before startup, remember to run <a href="https://as10896.github.io/codepraise-api-python/docker/" target="_blank">API</a> in advance and make sure you have all the configurations set up as mentioned before.
 
 ### Development
 
@@ -46,7 +46,7 @@ docker compose up -d  # run services in the background
 docker compose run --rm console  # run application console
 docker compose down  # shut down all the services
 ```
-After starting, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
+After startup, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
 
 ### Production
 Gunicorn + Uvicorn (4 workers)
@@ -55,7 +55,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d  # run ser
 docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm console  # run application console
 docker compose -f docker-compose.yml -f docker-compose.prod.yml down  # shut down all the servicesvolumes
 ```
-After starting, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
+After startup, you can visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> to see the application's page.
 
 ### BDD Testing
 

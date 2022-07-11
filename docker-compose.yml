@@ -1,8 +1,7 @@
 x-app: &default-app
   build:
-    args:
-      - INSTALL_DEV=${INSTALL_DEV:-false}
-  image: codepraise-app-python
+    target: base
+  image: codepraise-app-python:base
   volumes:
     - ./config/secrets:/app/config/secrets
   environment:
@@ -24,13 +23,8 @@ services:
     profiles:
       - debug
 
-  # `docker compose run --rm bash`
   bash:
     <<: *default-app
-    build:
-      args:
-        - INSTALL_DEV=true
-    image: codepraise-app-python:debug
     tty: true
     profiles:
       - debug

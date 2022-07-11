@@ -1,12 +1,11 @@
 x-test-app: &test-app
   build:
-    args:
-      - INSTALL_DEV=true
-  image: codepraise-app-python:debug
+    target: test
+  image: codepraise-app-python:test
   volumes:
     - ./config/secrets:/app/config/secrets
   environment: &env
-    APP_URL: http://app:3030
+    APP_URL: http://bdd-app:3030
     API_HOST: http://host.docker.internal:8080
     SESSION_SECRET:
   extra_hosts:
@@ -21,27 +20,33 @@ x-env-bdd-arm: &env-bdd-arm
   REMOTE_CHROME: http://chromium-arm:4444
 
 services:
-  app:
+  bdd-app:
     <<: *test-app
-    command: inv api.run.test -h 0.0.0.0
-
+    command: inv api.run.test -h 0.0.0.0  # host 0.0.0.0 is necessary for connecting with Selenium WebDriver
+  
   chrome:
-    image: selenium/standalone-chrome:4.1.2-20220317
+    image: selenium/standalone-chrome:4.3.0-20220706
     profiles:
       - bdd
+    # To avoid the browser crashing inside a docker container
+    # ref: https://github.com/SeleniumHQ/docker-selenium#--shm-size2g
+    shm_size: "2gb"
 
   # For ARM64 devices (e.g. Apple M1)
   # ref: https://github.com/SeleniumHQ/docker-selenium#experimental-mult-arch-aarch64armhfamd64-images
   chromium-arm:
-    image: seleniarm/standalone-chromium:4.0.0-20211213
+    image: seleniarm/standalone-chromium:4.3.0-20220706
     profiles:
       - bdd-arm
+    # To avoid the browser crashing inside a docker container
+    # ref: https://github.com/SeleniumHQ/docker-selenium#--shm-size2g
+    shm_size: "2gb"
 
   # `docker compose -f docker-compose.test.yml run --rm spec`
   spec:
     <<: *test-app
     depends_on:
-      - app
+      - bdd-app
       - chrome
     profiles:
       - bdd
@@ -54,7 +59,7 @@ services:
   spec-arm:
     <<: *test-app
     depends_on:
-      - app
+      - bdd-app
       - chromium-arm
     profiles:
       - bdd-arm

@@ -1,8 +1,21 @@
+x-dev-app: &dev-app
+  build:
+    target: debug
+  image: codepraise-app-python:debug
+  volumes:
+    - .:/app
+
 services:
   # `docker compose up`
   app:
+    <<: *dev-app
     command: inv api.run.dev -h 0.0.0.0
 
   # `docker compose run --rm console`
   console:
+    <<: *dev-app
     command: inv console -e development
+
+  # `$ docker compose run --rm bash`
+  bash:
+    <<: *dev-app

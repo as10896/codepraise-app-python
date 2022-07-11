@@ -1,8 +1,19 @@
+x-prod-app: &prod-app
+  build:
+    target: production
+  image: codepraise-app-python:prod
+
 services:
   # `docker compose -f docker-compose.yml -f docker-compose.prod.yml up`
   app:
+    <<: *prod-app
     command: inv api.run.prod
 
   # `docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm console`
   console:
+    <<: *prod-app
     command: inv console -e production
+
+  # `$ docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm bash`
+  bash:
+    <<: *prod-app
