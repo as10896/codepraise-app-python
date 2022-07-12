@@ -13,6 +13,7 @@ markdown_extensions:
       permalink: true
 nav:
   - Introduction: index.md
+  - architecture.md
   - prerequisite.md
   - docker.md
   - invoke.md

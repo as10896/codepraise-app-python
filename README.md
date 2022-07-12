@@ -17,6 +17,10 @@ For API / Notifier, please visit <a href="https://as10896.github.io/codepraise-a
 
 The live version can be found <a href="https://codepraise-app-python.herokuapp.com/" target="_blank">here</a>.
 
+## Architecture
+![Architecture](docs/static/images/architecture.png)
+
+
 ## Prerequisite
 ### Install Docker
 Make sure you have the latest version of <a href="https://www.docker.com/get-started" target="_blank">Docker 🐳</a> installed on your local machine.
