@@ -23,13 +23,13 @@ COPY pyproject.toml poetry.lock* ./
 
 RUN poetry install --no-root
 
-COPY . .
-
 # ==================== production ====================
 
 FROM base AS production
 
 RUN poetry install --no-root --with prod
+
+COPY . .
 
 EXPOSE 3000
 
@@ -41,6 +41,8 @@ FROM base AS debug
 
 RUN poetry install --no-root --with dev
 
+COPY . .
+
 EXPOSE 3000
 
 CMD ["inv", "api.run.dev", "-h", "0.0.0.0"]
@@ -50,6 +52,8 @@ CMD ["inv", "api.run.dev", "-h", "0.0.0.0"]
 FROM base AS test
 
 RUN poetry install --no-root --with test
+
+COPY . .
 
 EXPOSE 3030
 
